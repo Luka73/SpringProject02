@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 
+<!-- taglib: nome desse tipo de tag Java -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +12,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
+    <!-- Cache Control -->
+    <%
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+    %>
 
     <title>Agenda</title>
 
@@ -64,8 +75,8 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Cadastrar Compromissos</a>
-                        <a class="collapse-item" href="#">Consultar Compromissos</a>
+                        <a class="collapse-item" href="/SpringProject02/cadastro-compromisso">Cadastrar Compromissos</a>
+                        <a class="collapse-item" href="/SpringProject02/consulta-compromisso">Consultar Compromissos</a>
                     </div>
                 </div>
             </li>
@@ -96,12 +107,15 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Usuário Autenticado</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <!-- Expression Language ou Interpolação: nome dessa estrutura dólar e chaves -->
+                                    ${usuario_autenticado.nome} (${usuario_autenticado.email})
+                                </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#usuarioModal">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Minha Conta
                                 </a>
@@ -158,6 +172,7 @@
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
+        <!-- modal-dialog-centered -> para centralizar a modal -->
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -169,7 +184,48 @@
                 <div class="modal-body">Confirme se deseja realmente encerrar sua sessão</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="#">Sair do Sistema</a>
+                    <a class="btn btn-primary" href="/SpringProject02/logout">Sair do Sistema</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usuario Modal-->
+    <div class="modal fade" id="usuarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Minha Conta</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-6 text-right">Nome do Usuário: </div>
+                        <div class="col-md-6">
+                            <strong>${usuario_autenticado.nome}</strong>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 text-right">Email de Acesso: </div>
+                        <div class="col-md-6">
+                            <strong>${usuario_autenticado.email}</strong>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 text-right">Criado em: </div>
+                        <div class="col-md-6">
+                            <strong>
+                                <fmt:formatDate value="${usuario_autenticado.dataCriacao}"
+                                    pattern="dd/MM/yyyy" />
+                            </strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,5 +242,4 @@
     <script src="resources/js/sb-admin-2.min.js"></script>
 
 </body>
-
 </html>

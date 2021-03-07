@@ -16,7 +16,7 @@ public class UsuarioService {
 
     public void createOrUpdate(Usuario usuario) throws Exception {
 
-        if(usuario.getIdUsuario() == null && usuarioRepository.get(usuario.getEmail()) != null)
+        if(usuario.getIdUsuario() == null && usuarioRepository.get(usuario.getEmail()).size() == 1)
             throw new Exception("O email informado já encontra-se cadastrado.");
 
         usuarioRepository.save(usuario);
@@ -35,6 +35,11 @@ public class UsuarioService {
     }
 
     public Usuario get(String email, String senha) throws Exception{
-        return usuarioRepository.get(email, senha);
+        List<Usuario> result = usuarioRepository.get(email, senha);
+
+        if(result.size() == 1)
+            return result.get(0); //retornando o usuario obtido
+
+        return null;
     }
 }

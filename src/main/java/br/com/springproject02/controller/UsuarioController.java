@@ -68,4 +68,14 @@ public class UsuarioController {
         modelAndView.addObject("usuario", new Usuario());
         return modelAndView;
     }
+
+    @RequestMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request){
+
+        request.getSession().removeAttribute("usuario_autenticado"); //destroi só esse item da sessao
+        //request.getSession().invalidate(); //destroi tudo q estiver na sessao
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/");
+        return modelAndView;
+    }
 }
